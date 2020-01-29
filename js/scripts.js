@@ -2,7 +2,7 @@
 function Game(){
   this.players = [];
   this.winningScore = 100;
-  this.currentPlayerId = 1;
+  this.currentPlayerId = 0;
 }
 
 Game.prototype.addPlayer = function(player){
@@ -46,20 +46,54 @@ function Turn(playerObject){
 
 Turn.prototype.roll = function(){
   var newDie = new Die();
-  return newDie.beRolled();
-  //figure out where to evaluate and add roll value
+  var rollPoints = newDie.evaluateRoll();
+  if (rollPoints === 0){
+    runningTotal = 0;
+    return false;
+  } else {
+    runningTotal += rollPoints;
+    return true;
+  }
 }
 
 function Die(){
-  this.maxValue = 6;
+  this.value = Math.floor(Math.random() * 6) + 1;
 }
 
-Die.prototype.beRolled = function(){
-  var max = Die.maxValue;
-  return Math.floor(Math.random() * max) + 1;
+Die.prototype.evaluateRoll = function(){
+  if (this.value === 1) {
+    return 0;
+  } else {
+    return this.value;
+  }
 }
 
 // User Interface Logic
+var game = new Game();
+
+function takeATurn(player){
+  var currentTurn = game.startTurn(player)
+  var continuingTurn = currentTurn.roll();
+  if (!continuingTurn) {
+      game.endTurn(player.id);
+    } else {
+      // show buttons
+
+    }
+  }
+}
+
+function hold(){
+  game.endTurn(); // -- return true/false
+  // change screen
+  // if false, game over screen
+  // if true, takeATurn(game.players[currentPlayerId])
+}
+
+function rollAgain(){
+
+}
+
 $(document).ready(function(){
-  
+
 });
