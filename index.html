@@ -10,7 +10,7 @@
   <body>
     <div class="container">
       <h1>Play Pig Dice!</h1>
-      <p>Pig Dice is a dice game where players take turns repeatedly rolling a die to compete in points.  For each turn they can roll until they decide to "hold", increasing their total score by that amount.  If a "1" is rolled, they score nothing for that turn and their turn ends.  The first player to score <span id=winScore></span> or more points wins!</p>
+      <p>Pig Dice is a dice game where players take turns repeatedly rolling dice to compete in points.  For each turn they can roll until they decide to "hold", increasing their total score by that amount.  If a "1" is rolled, they score nothing for that turn and their turn ends.  The first player to score <span id=winScore></span> or more points wins!</p>
 
       <h2>Play now here!</h2>
 
@@ -22,6 +22,10 @@
 
       <div id="newGame">
         <h3>Start</h3>
+        <form id="startingInfo">
+          <label for="numDice">Number of Dice per Roll?</label>
+          <input type="number" id="numDice" min="1">
+        </form>
         <button id="startButton">Play</button>
       </div>
       <div id="gameOver">
@@ -31,7 +35,7 @@
       </div>
       <div id="turn">
         <h3>Turn</h3>
-        <p>Current dice roll: <span id="diceValue"></span></p>
+        <p>Current dice rolls for turn: <span id="diceValue"></span></p>
         <p>Current turn total: <span id="turnTotal"></span></p>
         <div id="rollDie">
           <button id="rollButton">Roll die</button>

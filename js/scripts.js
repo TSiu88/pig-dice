@@ -4,6 +4,7 @@ function Game(){
   this.winningScore = 100;
   this.currentPlayerId = 0;
   this.gameOver = false;
+  this.diceAmount = 1;
 }
 
 Game.prototype.addPlayer = function(player){
@@ -50,16 +51,20 @@ function Turn(playerObject){
 }
 
 Turn.prototype.roll = function(){
-  var newDie = new Die();
-  updateTurnDisplay(newDie.value);
-  var rollPoints = newDie.evaluateRoll();
-  if (rollPoints === 0){
-    this.runningTotal = 0;
-    return false;
-  } else {
-    this.runningTotal += rollPoints;
-    return true;
+  for (var i = 0; i<game.diceAmount; i++){
+    var newDie = new Die();
+    console.log(newDie.value)
+    updateTurnDisplay(newDie.value); 
+    var rollPoints = newDie.evaluateRoll();
+    if (rollPoints === 0){
+      this.runningTotal = 0;
+      return false;
+    } else {
+      this.runningTotal += rollPoints;
+      
+    }
   }
+  return true;
 }
 
 function Die(){
@@ -121,7 +126,7 @@ function displayScores(){
 }
 
 function updateTurnDisplay(die){
-  $("#diceValue").text(die);
+  $("#diceValue").append(die + " ");
 }
 
 function continueTurnScreen(){
@@ -140,6 +145,7 @@ function newTurnScreen(){
 
 $(document).ready(function(){
   $("#winScore").text(game.winningScore);
+
   $("#startButton").click(function(){
     game = new Game();
     $("#currentStats").show();
@@ -153,6 +159,8 @@ $(document).ready(function(){
     game.addPlayer(player1);
     game.addPlayer(player2);
 
+    game.diceAmount = $("#numDice").val();
+    console.log(game.diceAmount);
     displayScores();
   });
 
