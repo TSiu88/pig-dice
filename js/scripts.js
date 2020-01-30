@@ -55,7 +55,6 @@ Turn.prototype.roll = function(){
   var rollPoints = newDie.evaluateRoll();
   if (rollPoints === 0){
     this.runningTotal = 0;
-    //alert("You rolled a 1. Lose a turn. =(")
     return false;
   } else {
     this.runningTotal += rollPoints;
@@ -89,6 +88,7 @@ function beginTurn(player){
 function takeATurn(){
   var continuingTurn = currentTurn.roll();
   if (!continuingTurn) {
+    alert("You rolled a 1. Lose a turn. =(")
     game.endTurn();
     newTurnScreen();
   } else {
@@ -105,7 +105,6 @@ function hold(){
     gameOver();
   }else{
     newTurnScreen();
-    
   }
 }
 
