@@ -3,10 +3,15 @@ function Game(){
   this.players = [];
   this.winningScore = 100;
   this.currentPlayerId = 0;
+  this.gameOver = false;
 }
 
 Game.prototype.addPlayer = function(player){
   this.players.push(player);
+}
+
+Game.prototype.getPlayerScore = function(playerId){
+  return this.players[playerId].totalScore;
 }
 
 Game.prototype.startTurn = function(playerObject){
@@ -15,28 +20,28 @@ Game.prototype.startTurn = function(playerObject){
 }
 
 Game.prototype.switchPlayer = function(currentPlayerId){
-  if (currentPlayerId === this.players[0].id) {
-    this.currentPlayerId ++;
-  } else if (currentPlayerId === this.players[1].id) {
-    this.currentPlayerId --;
+  if (currentPlayerId === 0) {
+    this.currentPlayerId = 1;
+  } else if (currentPlayerId === 1) {
+    this.currentPlayerId = 0;
   }
 }
 
-Game.prototype.endTurn = function(playerId){
-  if (this.totalScore >= this.winningScore) {
-    this.gameOver();
+Game.prototype.endTurn = function(){
+  if (this.getPlayerScore(this.currentPlayerId) >= this.winningScore) {
+    this.gameOver = true;
   } else {
-    this.switchPlayer(playerId);
+    this.switchPlayer(this.currentPlayerId);
   }
-}
-
-Game.prototype.gameOver = function(){
-  return this.currentPlayerId;
 }
 
 function Player(id){
   this.id = id;
   this.totalScore = 0;
+}
+
+Player.prototype.increaseTotalBy = function(turnScore){
+  this.totalScore += turnScore;
 }
 
 function Turn(playerObject){
@@ -46,12 +51,14 @@ function Turn(playerObject){
 
 Turn.prototype.roll = function(){
   var newDie = new Die();
+  updateTurnDisplay(newDie.value);
   var rollPoints = newDie.evaluateRoll();
   if (rollPoints === 0){
-    runningTotal = 0;
+    this.runningTotal = 0;
+    //alert("You rolled a 1. Lose a turn. =(")
     return false;
   } else {
-    runningTotal += rollPoints;
+    this.runningTotal += rollPoints;
     return true;
   }
 }
@@ -68,32 +75,103 @@ Die.prototype.evaluateRoll = function(){
   }
 }
 
-// User Interface Logic
-var game = new Game();
 
-function takeATurn(player){
-  var currentTurn = game.startTurn(player)
+
+// User Interface Logic -----------------------------------------------------
+var game = new Game();
+var currentTurn;
+
+function beginTurn(player){
+  currentTurn = game.startTurn(player);
+  takeATurn();
+}
+
+function takeATurn(){
   var continuingTurn = currentTurn.roll();
   if (!continuingTurn) {
-      game.endTurn(player.id);
-    } else {
-      // show buttons
-
-    }
+    game.endTurn();
+    newTurnScreen();
+  } else {
+    continueTurnScreen();
   }
+  
 }
 
 function hold(){
-  game.endTurn(); // -- return true/false
-  // change screen
-  // if false, game over screen
-  // if true, takeATurn(game.players[currentPlayerId])
+  game.players[game.currentPlayerId].increaseTotalBy(currentTurn.runningTotal);
+  displayScores();
+  game.endTurn();
+  if(game.gameOver === true){
+    gameOver();
+  }else{
+    newTurnScreen();
+    
+  }
 }
 
-function rollAgain(){
+function gameOver(){
+  $("#gameOver").show();
+  $("#turn").hide();
+  displayScores();
+  $("#winner").text(game.currentPlayerId + 1);
+}
 
+function displayScores(){
+  $("#p1score").text(game.players[0].totalScore);
+  $("#p2score").text(game.players[1].totalScore);
+}
+
+function updateTurnDisplay(die){
+  $("#diceValue").text(die);
+}
+
+function continueTurnScreen(){
+  $("#holdOrRollAgain").show();
+  $("#rollDie").hide();
+  $("#turnTotal").text(currentTurn.runningTotal);
+}
+
+function newTurnScreen(){
+  $("#rollDie").show();
+  $("#currPlayer").text("Player " + (game.currentPlayerId+ 1));
+  $("#holdOrRollAgain").hide();
+  $("#diceValue").text("");
+  $("#turnTotal").text("");
 }
 
 $(document).ready(function(){
+  $("#winScore").text(game.winningScore);
+  $("#startButton").click(function(){
+    game = new Game();
+    $("#currentStats").show();
+    $("#turn").show();
+    newTurnScreen();
+    $("#gameOver").hide();
+    $("#newGame").hide();
 
+    var player1 = new Player(0);
+    var player2 = new Player(1);
+    game.addPlayer(player1);
+    game.addPlayer(player2);
+
+    displayScores();
+  });
+
+  $("#rollButton").click(function(){
+    beginTurn(game.players[game.currentPlayerId]);
+  });
+
+  $("#holdButton").click(function(){
+    hold();
+  });
+
+  $("#rollAgainButton").click(function(){
+    takeATurn();
+  });
+
+  $("#newGameButton").click(function(){
+    $("#gameOver").hide();
+    $("#newGame").show();
+    $("#currentStats").hide();
+  });
 });

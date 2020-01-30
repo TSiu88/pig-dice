@@ -10,11 +10,37 @@
   <body>
     <div class="container">
       <h1>Play Pig Dice!</h1>
-      <p>Pig Dice is a dice game where players take turns repeatedly rolling a die to compete in points.  For each turn they can roll until they decide to "hold", increasing their total score by that amount.  If a "1" is rolled, they score nothing for that turn and their turn ends.  The first player to score 100 or more points wins!</p>
+      <p>Pig Dice is a dice game where players take turns repeatedly rolling a die to compete in points.  For each turn they can roll until they decide to "hold", increasing their total score by that amount.  If a "1" is rolled, they score nothing for that turn and their turn ends.  The first player to score <span id=winScore></span> or more points wins!</p>
 
       <h2>Play now here!</h2>
 
+      <div id="currentStats">
+        <p>Player 1 Score: <span id="p1score"></span></p>
+        <p>Player 2 Score: <span id="p2score"></span></p>
+        <p>Current Player Turn: <span id="currPlayer"></span></p>
+      </div>
 
+      <div id="newGame">
+        <h3>Start</h3>
+        <button id="startButton">Play</button>
+      </div>
+      <div id="gameOver">
+        <h3>Game Over</h3>
+        <p>Player <span id="winner"></span> wins!</p>
+        <button id="newGameButton">Play Again</button>
+      </div>
+      <div id="turn">
+        <h3>Turn</h3>
+        <p>Current dice roll: <span id="diceValue"></span></p>
+        <p>Current turn total: <span id="turnTotal"></span></p>
+        <div id="rollDie">
+          <button id="rollButton">Roll die</button>
+        </div> 
+        <div id="holdOrRollAgain">Roll Again?
+          <button id="holdButton">End turn</button>
+          <button id="rollAgainButton">Roll again</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>

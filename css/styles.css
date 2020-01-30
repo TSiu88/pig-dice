@@ -1,0 +1,11 @@
+#gameOver{
+  display: none;
+}
+
+#turn{
+  display: none;
+}
+
+#currentStats{
+  display: none;
+}
