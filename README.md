@@ -18,7 +18,7 @@ _Pig Dice is a dice game where players take turns repeatedly rolling dice to com
 
 *This page may be viewed by:*
 
-1. Clone the [repository](https://github.com/TSiu88/my-first-webpage.git) from my [GitHub page](https://github.com/TSiu88)
+1. Clone the [repository](https://github.com/TSiu88/pig-dice.git) from my [GitHub page](https://github.com/TSiu88)
 2. Open the **index.html** file in any web browser.
 
 ## Other Technologies Used
